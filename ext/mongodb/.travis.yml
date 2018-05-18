@@ -1,0 +1,47 @@
+language: php
+php:
+  - 7.0
+  - 5.6
+  - 5.5
+  - 5.4
+
+env:
+  global:
+    - TEST_PHP_ARGS="-q -s output.txt -g XFAIL,FAIL,BORK,WARN,LEAK,SKIP -x --show-diff"
+    - REPORT_EXIT_STATUS=1
+    - MONGODB_ORCHESTRATION="http://localhost:8889"
+    - MONGODB_ORCHESTRATION_REPO="git+git://github.com/mongodb/mongo-orchestration@master"
+    - MONGODB_ORCHESTRATION_PRESETS_ROOT=`pwd`
+    - secure: "Dofd9NvXIKEat1PMiia3RQgNsJLaKtzZRf9rM4MsqFaBQPbJmVWPANJkayJPcK+l8pLxHyzzH7WqxML+SlBhBTHdJB++1woXxoVwm+sDdwSye6e+eXc3/zRUxb7zyItBZcvVp2tIJpx5kXJb+CoUQakbfWEQQFk4xrOF0R56+8Y="
+    - secure: "pfGVPucvgcgcefhtzAVeejlpOtn4TnAqJSTM8mJkBl36KdU9P7hMuD3czQ4drWgzZ373/VT5UVhLu/HNsdbW0YBTeqPKJ4YNjqVVLytI8xT7y2Lw9l+I7o93j98TMgAoo8nVRmp/E4D6yutbKK1eddrcmf899R1iJbw8v8d1Ht8="
+
+before_install:
+  - sudo pip install cpp-coveralls
+  - sudo pip install ${MONGODB_ORCHESTRATION_REPO}
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+  - echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+  - sudo apt-get update
+  - sudo apt-get install -y mongodb-org
+  - sudo apt-get install gdb valgrind
+  - sudo apt-get install cdbs debhelper build-essential python-lxml
+  - php -r 'if ( ! ($f = php_ini_loaded_file())) { $f = PHP_CONFIG_FILE_PATH . "/php.ini"; } file_put_contents($f, "variables_order=EGPCS\n", FILE_APPEND); $a = file($f, FILE_IGNORE_NEW_LINES); var_dump($a[count($a)-1]);'
+
+before_script:
+  - ulimit -a
+  - ulimit -c unlimited || true
+  - "./.travis.scripts/compile.sh"
+  - mongo --eval 'tojson(db.runCommand({buildInfo:1}))'
+
+notifications:
+  email:
+  - bjori@mongodb.com
+
+script:
+  - make test
+
+after_success:
+  - make coveralls
+
+after_failure:
+  - find . -name \*core\* -exec ./.travis.scripts/debug-core.sh {} \;
+

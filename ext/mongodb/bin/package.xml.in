@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.1" xmlns="http://pear.php.net/dtd/package-2.1" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.1     http://pear.php.net/dtd/package-2.1.xsd">
+ <name>mongodb</name>
+ <channel>pecl.php.net</channel>
+ <summary>MongoDB driver for PHP</summary>
+ <description>
+The purpose of this driver is to provide exceptionally thin glue between MongoDB
+and PHP, implementing only fundemental and performance-critical components
+necessary to build a fully-functional MongoDB driver.
+</description>
+ <lead>
+  <name>Hannes Magnusson</name>
+  <user>bjori</user>
+  <email>bjori@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Jeremy Mikola</name>
+  <user>jmikola</user>
+  <email>jmikola@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Derick Rethans</name>
+  <user>derick</user>
+  <email>derick@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>%RELEASE_DATE%</date>
+ <time>%RELEASE_TIME%</time>
+ <version>
+  <release>%RELEASE_VERSION%</release>
+  <api>%RELEASE_VERSION%</api>
+ </version>
+ <stability>
+  <release>%RELEASE_STABILITY%</release>
+  <api>%RELEASE_STABILITY%</api>
+ </stability>
+ <license uri="http://www.apache.org/licenses/LICENSE-2.0">Apache License</license>
+ <notes>
+%RELEASE_NOTES%
+ </notes>
+ <contents>
+%RELEASE_FILES%
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.4.0</min>
+    <max>7.99.99</max>
+   </php>
+   <pearinstaller>
+    <min>1.4.8</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <providesextension>mongodb</providesextension>
+ <extsrcrelease/>
+</package>
